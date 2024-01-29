@@ -67,7 +67,10 @@ class Scheme:
         if tree.left==None and tree.right==None:
             return SR(node).subs(coef)
         elif tree.left==None:
-            return node(self.subs(tree.right, func, f, x, coef))
+            if issubclass(type(tree.item), sage.symbolic.function.SymbolicFunction):
+                return node.subs([arg(func) == self.subs(tree.right, func, f, x, coef)])
+            else:
+                return node(self.subs(tree.right, func, f, x, coef))
         else:
             return node(self.subs(tree.left, func, f, x, coef),self.subs(tree.right, func, f, x, coef))
     def __subs(self, tree: Tree, func, f, x, coef):
@@ -149,7 +152,9 @@ class Scheme:
         dvar = self.dvar
         delta = self.delta
         D = lambda v: diff(v)*v
-        scheme = self.scheme.substitute_function(self.op, D)
+        scheme = self.scheme
+
+        if self.op: scheme = scheme.substitute_function(self.op, D)
         
         k = self.order + 1
         c = var(['c' + str(i) for i in range(k + 1)])

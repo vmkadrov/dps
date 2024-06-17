@@ -4,9 +4,9 @@ class Tree():
         self.left = left
         self.right = right
  
-    def show(self):
+    def show(self, figsize = 30, fontsize = 1):
         G = self.get_graph(Graph(), [0])
-        return G.plot(layout="tree", tree_orientation = "down", figsize = 30, vertex_size = 0, fontsize = 1)
+        return G.plot(layout="tree", tree_orientation = "down", figsize = figsize, vertex_size = 0, fontsize = fontsize)
     def get_graph(self, g: Graph, cnt):
         init = cnt[0]
         if self.right:
@@ -39,7 +39,7 @@ class Scheme:
         self.func = ops[0]
         self.op = ops[1]
         
-        #if n_val != 'n_val': self.explicit = False
+        if str(n_val) != 'n_val': self.explicit = False
         
         if not delta:
             self.delta = var('d' + str(self.ivar))
@@ -79,13 +79,12 @@ class Scheme:
         if issubclass(type(node), sage.symbolic.function.SymbolicFunction):
             func = fun(func)
             node = func
-        elif type(node) == sage.symbolic.operators.FDerivativeOperator:
+        elif node == self.op:
             if not tree.left:
-                node = fun(func)
-                for _ in range(len(node.parameter_set())):
-                    node = D(node)
-                tree = self.__create_tree(node)
+                tree = self.__create_tree(D(tree.right.evaluate()))
                 node = tree.item
+            else:
+                raise ValueError('Derivative operator error')
         elif node == self.dvar:
             node = arg(func)  
         return node
@@ -118,6 +117,11 @@ class Scheme:
         return SS
     def latex(self):
         print(f'\\frac{{d{self.dvar}}}{{{self.delta}}} = {latex(self.scheme)}')
+    def coef_latex(self, right):
+        sys = ""
+        for  eq in self.coefficients(right):
+            sys = sys + str(latex(eq)) + ',' + '\\\\\n'
+        print("\\begin{cases}\n", sys,"\\end{cases}")
     def __create_tree(self, expr):
 
         if type(expr)==tuple:
@@ -190,6 +194,8 @@ class Scheme:
 def dps(problem, scheme: Scheme, coef: list, N = 10):
     if not scheme.explicit:
         raise NotImplementedError("Only for explicit schemes")
+    elif len(problem.list()[0]) > 2:
+        raise NotImplementedError("Only for two equations")
     t0 = 0
     [f,x,x0,T]=problem.list()
     dt = RR(T/N)

@@ -183,7 +183,7 @@ class Scheme:
         
         Y = self.parametric_eqs(right)
 
-        R = QQ[tuple(list(self.params) + [self.ivar])]
+        R = PolynomialRing(QQ,tuple(list(self.params) + [self.ivar]), order =  'lex')
         K = PolynomialRing(R, self.dvar, order = 'lex')
         RES = []
         for i in range(len(Y)):

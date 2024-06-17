@@ -1,21 +1,20 @@
-# Алгоритм нахождения коэффициентов для разностных схем
+# On the selection of weights for difference schemes approximating systems of differential equations
 
-Программа написана для использования в среде Sage 9.2. Полные примеры использования можно найти в *examples*
+1. [Finding coefficients](#finding-coefficients)
+2. [Numerical experiments](#numerical-experiments)
 
-1. [Рассчет коэффициентов](#рассчет-коэффициентов)
-2. [Численные эксперименты](#численные-эксперименты)
+## Finding coefficients
 
-## Рассчет коэффициентов
-
-Задание схемы:
+Defining a scheme:
 ```python
 sage: load("dps.sage")
 sage: s = Scheme([x,t],[f,L], param, rk4(), order = 4)
 ```
 
-## Численные эксперименты
+## Numerical experiments
 
-Функция *dps()* (рассчета по схемам) основана на пакете [fdm](https://github.com/malykhmd/fdm). Импорт в интерфейсе IPython Notebook:
+    For using dps() function you should import [fdm](https://github.com/malykhmd/fdm) package. 
+In IPython Notebook:
 ```python
 %%capture
 !git clone https://github.com/malykhmd/fdm

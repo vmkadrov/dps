@@ -17,6 +17,7 @@ sage: s = Scheme([x,t],[f,L], param, rk4(), order = 4)
 
 Функция *dps()* (рассчета по схемам) основана на пакете [fdm](https://github.com/malykhmd/fdm). Импорт в интерфейсе IPython Notebook:
 ```python
+%%capture
 !git clone https://github.com/malykhmd/fdm
 %cd fdm
 load('fdm.sage')

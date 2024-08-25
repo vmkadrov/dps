@@ -13,7 +13,7 @@ sage: s = Scheme([x,t],[f,L], param, rk4(), order = 4)
 
 ## Numerical experiments
 
-    For using dps() function you should import [fdm](https://github.com/malykhmd/fdm) package. 
+For using dps() function you should import [fdm](https://github.com/malykhmd/fdm) package. 
 In IPython Notebook:
 ```python
 %%capture
